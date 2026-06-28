@@ -1,0 +1,32 @@
+package com.example.themoviedb.data.remote.dto
+
+import com.example.themoviedb.domain.model.Movie
+import kotlinx.serialization.SerialName
+
+data class MovieDto(
+    val id: Int,
+    val title: String,
+    val overview: String,
+    @SerialName("poster_path") val posterPath: String? = null,
+    @SerialName("backdrop_path") val backdropPath: String? = null,
+    @SerialName("release_date") val releaseDate: String? = null,
+    @SerialName("vote_average") val voteAverage: Double = 0.0,
+    @SerialName("vote_count") val voteCount: Int = 0,
+    val popularity: Double = 0.0,
+    @SerialName("genre_ids") val genreIds: List<Int> = emptyList(),
+    val adult: Boolean = false,
+    @SerialName("original_language") val originalLanguage: String = "",
+    @SerialName("original_title") val originalTitle: String = ""
+)
+
+fun MovieDto.toDomain(): Movie = Movie(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    releaseDate = releaseDate,
+    voteAverage = voteAverage,
+    voteCount = voteCount,
+    genreIds = genreIds
+)
