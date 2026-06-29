@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     //alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,6 +9,15 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+val tmdbToken: String = localProperties.getProperty("TMDB_ACCESS_TOKEN") ?: ""
 
 android {
     namespace = "com.example.themoviedb"
@@ -24,7 +35,7 @@ android {
         buildConfigField(
             "String",
             "TMDB_ACCESS_TOKEN",
-            "\"${project.findProperty("TMDB_ACCESS_TOKEN") ?: ""}\""
+            "\"$tmdbToken\""
         )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -96,6 +107,8 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // Image Loading
     implementation(libs.landscapist.coil)

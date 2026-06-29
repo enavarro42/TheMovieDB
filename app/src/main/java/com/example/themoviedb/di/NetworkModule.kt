@@ -1,12 +1,15 @@
-package com.example.themoviedb.core.di
+package com.example.themoviedb.di
 
 import com.example.themoviedb.BuildConfig
 import com.example.themoviedb.core.network.AuthInterceptor
 import com.example.themoviedb.data.remote.api.MovieApi
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -39,6 +42,19 @@ object NetworkModule {
             )
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(
+                Json { ignoreUnknownKeys = true }
+                    .asConverterFactory("application/json".toMediaType())
+            )
             .build()
     }
 

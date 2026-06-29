@@ -2,7 +2,9 @@ package com.example.themoviedb.data.remote.dto
 
 import com.example.themoviedb.domain.model.Movie
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieDto(
     val id: Int,
     val title: String,
